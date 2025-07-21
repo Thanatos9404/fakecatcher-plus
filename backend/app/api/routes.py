@@ -8,6 +8,7 @@ from ..core.ai_detection.ensemble import EnhancedResumeAnalyzer
 from ..core.trust_score import TrustScoreCalculator
 from ..utils.file_handler import FileHandler
 from ..utils.validators import validate_file
+from app.configure import settings
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

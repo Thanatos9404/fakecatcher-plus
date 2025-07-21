@@ -1,7 +1,7 @@
 from fastapi import UploadFile
 from typing import Dict, List
 import os
-from ..config import settings
+from ..configure import settings
 
 
 async def validate_file(file: UploadFile, file_type: str) -> Dict[str, any]:

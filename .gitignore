@@ -18,6 +18,7 @@ frontend/build/
 .env.local
 .env.production
 .env.staging
+.env.development
 
 # IDE files
 .vscode/
@@ -46,13 +47,26 @@ temp/
 *.h5
 *.pt
 *.pth
+*.onnx
+models/weights/
 models/*.bin
-models/*.onnx
 data/raw_training_data/
 data/labeled_resumes/
 training_logs/
 wandb/
 checkpoints/
+
+# Hugging Face specific
+.cache/huggingface/
+transformers_cache/
+huggingface_hub/
+
+# API Keys & Secrets (CRITICAL - Never commit API keys)
+api_keys.json
+secrets/
+.env.production.local
+hf_token.txt
+*.key
 
 # Database
 *.db
@@ -64,6 +78,7 @@ coverage/
 .coverage
 .nyc_output
 .pytest_cache/
+htmlcov/
 
 # Runtime data
 pids
@@ -75,17 +90,7 @@ pids
 .npm
 .yarn-integrity
 *.tgz
-
-# Parcel bundler cache
-.parcel-cache
-
-# Next.js / Nuxt.js
-.next
-.nuxt
-
-# Storybook
-.out
-.storybook-out
+package-lock.json.backup
 
 # Python specific
 *.py[cod]
@@ -119,10 +124,18 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
-# API Keys & Secrets (extra security)
-api_keys.json
-secrets/
-.env.production.local
+# Parcel bundler cache
+.parcel-cache
 
-# Hugging Face cache
-.cache/huggingface/
+# Next.js / Nuxt.js
+.next
+.nuxt
+
+# Storybook
+.out
+.storybook-out
+
+# Setup and configuration backups
+setup_path.py.backup
+configure.py.backup
+config.py.old
