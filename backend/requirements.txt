@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-docx
+PyPDF2
+textstat
+transformers
+torch
+numpy
+pandas
+scikit-learn
+pydantic
+pydantic-settings
+python-dotenv
+aiofiles
