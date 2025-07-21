@@ -40,7 +40,7 @@ temp/
 *.tmp
 .cache/
 
-# AI Models (large files)
+# AI Models & Large Files
 *.pkl
 *.joblib
 *.h5
@@ -48,16 +48,22 @@ temp/
 *.pth
 models/*.bin
 models/*.onnx
+data/raw_training_data/
+data/labeled_resumes/
+training_logs/
+wandb/
+checkpoints/
 
 # Database
 *.db
 *.sqlite
 *.sqlite3
 
-# Coverage
+# Coverage & Testing
 coverage/
 .coverage
 .nyc_output
+.pytest_cache/
 
 # Runtime data
 pids
@@ -65,32 +71,58 @@ pids
 *.seed
 *.pid.lock
 
-# Optional npm cache directory
+# Package managers
 .npm
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
+.yarn-integrity
 *.tgz
 
-# Yarn Integrity file
-.yarn-integrity
-
-# parcel-bundler cache
+# Parcel bundler cache
 .parcel-cache
 
-# Next.js build output
+# Next.js / Nuxt.js
 .next
-
-# Nuxt.js build / generate output
 .nuxt
-dist
 
-# Storybook build outputs
+# Storybook
 .out
 .storybook-out
 
-# Temporary folders
+# Python specific
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+bin/
+include/
+lib/
+lib64/
+share/
+pyvenv.cfg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Temporary directories
 tmp/
 temp/
+
+# OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# API Keys & Secrets (extra security)
+api_keys.json
+secrets/
+.env.production.local
+
+# Hugging Face cache
+.cache/huggingface/

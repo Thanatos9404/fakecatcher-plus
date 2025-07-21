@@ -12,3 +12,9 @@ pydantic==2.5.0
 pydantic-settings==2.1.0
 python-dotenv==1.0.0
 aiofiles==23.2.1
+huggingface-hub==0.20.3
+transformers==4.36.2
+httpx==0.26.0
+tenacity==8.2.3
+python-jose[cryptography]==3.3.0
+cachetools==5.3.2

@@ -1,8 +1,16 @@
+import sys
+import os
+from pathlib import Path
+
+# Add current directory and app directory to Python path
+current_dir = Path(__file__).parent
+sys.path.append(str(current_dir))
+sys.path.append(str(current_dir / "app"))
+
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
-import os
 from dotenv import load_dotenv
 
 from app.api.routes import router

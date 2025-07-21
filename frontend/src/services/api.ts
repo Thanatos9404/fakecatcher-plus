@@ -1,6 +1,16 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
-import type { AnalysisResult, HealthCheckResponse } from '../types/api';
+
+// ADD INTERFACE IMPORTS HERE:
+import type {
+  AnalysisResult,
+  HealthCheckResponse,
+  TextStatistics,
+  AIPatterns,
+  KeywordAnalysis,
+  SuspiciousSection,
+  ComprehensiveAnalysisResult
+} from '../types/api';
 
 const API_BASE_URL = 'http://localhost:8000/api/v1';
 
@@ -47,6 +57,11 @@ export const analyzeResume = async (file: File): Promise<AnalysisResult> => {
 
 export const healthCheck = async (): Promise<HealthCheckResponse> => {
   const response: AxiosResponse<HealthCheckResponse> = await api.get('/health');
+  return response.data;
+};
+
+export const checkAIHealth = async (): Promise<any> => {
+  const response: AxiosResponse<any> = await api.get('/health/ai');
   return response.data;
 };
 

@@ -1,3 +1,4 @@
+// Basic interfaces that were missing
 export interface TextStatistics {
   flesch_reading_ease: number;
   flesch_kincaid_grade: number;
@@ -29,35 +30,76 @@ export interface SuspiciousSection {
   reasons: string[];
 }
 
-export interface ResumeAnalysis {
+export interface AIAnalysisDetails {
   ai_probability: number;
   confidence_level: string;
+  human_probability: number;
+  mixed_probability: number;
+  analysis_method: string;
+  model_used: string;
+  detailed_scores: {
+    ai_generated: number;
+    human_written: number;
+    mixed_human_ai: number;
+  };
+  analysis_details: {
+    text_length: number;
+    analysis_scope: string;
+    detection_category: string;
+    risk_assessment: string;
+    recommended_actions: string[];
+  };
+  processing_timestamp: string;
+}
+
+export interface EnhancedAnalysisResult {
+  ai_probability: number;
+  confidence_level: string;
+  analysis_method: string;
+  ai_enhanced: boolean;
   text_statistics: TextStatistics;
   ai_patterns: AIPatterns;
   keyword_analysis: KeywordAnalysis;
   suspicious_sections: SuspiciousSection[];
   recommendations: string[];
+  processing_details: {
+    rule_based_completed: boolean;
+    ai_analysis_attempted: boolean;
+    ai_analysis_successful: boolean;
+    ensemble_method?: string;
+    ai_weight?: number;
+    rule_weight?: number;
+  };
 }
 
-export interface TrustScoreComponents {
-  resume_authenticity: number;
-  video_authenticity: string;
-  audio_authenticity: string;
-}
-
-export interface TrustScore {
+export interface EnhancedTrustScore {
   overall_trust_score: number;
   trust_level: string;
-  components: TrustScoreComponents;
+  ai_enhancement_applied?: boolean;
+  confidence_boost?: number;
+  components: {
+    resume_authenticity: number;
+    ai_verification: string;
+    video_authenticity: string;
+    audio_authenticity: string;
+  };
   recommendation: string;
   next_steps: string[];
 }
 
-export interface AnalysisResult {
+export interface ComprehensiveAnalysisResult {
   status: string;
-  analysis: ResumeAnalysis;
-  trust_score: TrustScore;
+  analysis: EnhancedAnalysisResult;
+  trust_score: EnhancedTrustScore;
   mvp_version: string;
+  file_info: {
+    filename: string;
+    size_bytes: number;
+    text_length: number;
+    file_type: string;
+  };
+  processing_timestamp: string;
+  detailed_analysis?: any;
 }
 
 export interface HealthCheckResponse {
@@ -69,3 +111,6 @@ export interface ApiResponse<T = any> {
   data: T;
   message?: string;
 }
+
+// Main analysis result interface (supports both versions)
+export interface AnalysisResult extends ComprehensiveAnalysisResult {}
