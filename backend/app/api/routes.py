@@ -1,14 +1,22 @@
 import traceback
 import logging
-from fastapi import APIRouter, File, UploadFile, HTTPException
+from fastapi import APIRouter, File, UploadFile, HTTPException, Form
 from typing import Optional
+import sys
+import os
 
-# Update imports to use new enhanced analyzer
+sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
+
+try:
+    from app.configure import settings
+except ImportError:
+    from configure import settings
+
+# Enhanced analyzers
 from ..core.ai_detection.ensemble import EnhancedResumeAnalyzer
-from ..core.trust_score import TrustScoreCalculator
+from ..core.job_verification.job_analyzer import JobPostingAnalyzer
 from ..utils.file_handler import FileHandler
 from ..utils.validators import validate_file
-from app.configure import settings
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -16,22 +24,21 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Initialize enhanced analyzers
+# Initialize analyzers
 try:
     enhanced_analyzer = EnhancedResumeAnalyzer()
+    job_analyzer = JobPostingAnalyzer()
     file_handler = FileHandler()
-    logger.info("Enhanced AI analyzers initialized successfully")
+    logger.info("All analyzers initialized successfully")
 except Exception as e:
-    logger.error(f"Failed to initialize enhanced analyzers: {str(e)}")
+    logger.error(f"Failed to initialize analyzers: {str(e)}")
     logger.error(traceback.format_exc())
 
 
+# Existing resume analysis endpoint
 @router.post("/analyze/resume")
 async def analyze_resume_enhanced(file: UploadFile = File(...)):
-    """
-    Enhanced resume analysis with AI detection capabilities
-    Combines rule-based analysis with Hugging Face AI models for maximum accuracy
-    """
+    """Enhanced resume analysis with AI detection capabilities"""
     try:
         logger.info(f"Enhanced analysis request: {file.filename}, content_type: {file.content_type}")
 
@@ -69,7 +76,7 @@ async def analyze_resume_enhanced(file: UploadFile = File(...)):
                     "text_length": len(text_content),
                     "file_type": validation_result.get("file_extension", "unknown")
                 },
-                "processing_timestamp": str(traceback.format_exc())[:100] if False else "success"
+                "processing_timestamp": "success"
             })
 
             return comprehensive_result
@@ -80,7 +87,6 @@ async def analyze_resume_enhanced(file: UploadFile = File(...)):
             raise HTTPException(status_code=500, detail=f"AI analysis failed: {str(e)}")
 
     except HTTPException:
-        # Re-raise HTTP exceptions as-is
         raise
     except Exception as e:
         logger.error(f"❌ Unexpected error in enhanced analyze_resume: {str(e)}")
@@ -88,6 +94,100 @@ async def analyze_resume_enhanced(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
+# NEW: Job posting analysis endpoints
+@router.post("/analyze/job/upload")
+async def analyze_job_upload(file: UploadFile = File(...)):
+    """Analyze job posting from uploaded image or PDF"""
+    try:
+        logger.info(f"Job upload analysis request: {file.filename}, content_type: {file.content_type}")
+
+        # Validate file type
+        if file.content_type.startswith('image/'):
+            input_type = 'image'
+        elif file.content_type == 'application/pdf':
+            input_type = 'pdf'
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported file type. Please upload an image or PDF.")
+
+        # Validate file size (max 10MB)
+        file_size = 0
+        content = await file.read()
+        file_size = len(content)
+        await file.seek(0)  # Reset file position
+
+        if file_size > 10 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="File too large. Maximum size is 10MB.")
+
+        logger.info(f"✅ File validation passed for {input_type}")
+
+        # Run job posting analysis
+        try:
+            logger.info("🚀 Starting job posting analysis...")
+            analysis_result = await job_analyzer.analyze_job_posting(input_type, file)
+            logger.info("✅ Job posting analysis completed successfully")
+
+            # Add file metadata
+            analysis_result.update({
+                "file_info": {
+                    "filename": file.filename,
+                    "size_bytes": file_size,
+                    "file_type": input_type
+                }
+            })
+
+            return analysis_result
+
+        except Exception as e:
+            logger.error(f"❌ Job posting analysis failed: {str(e)}")
+            logger.error(traceback.format_exc())
+            raise HTTPException(status_code=500, detail=f"Job analysis failed: {str(e)}")
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Unexpected error in job upload analysis: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+@router.post("/analyze/job/url")
+async def analyze_job_url(job_url: str = Form(...)):
+    """Analyze job posting from URL"""
+    try:
+        logger.info(f"Job URL analysis request: {job_url}")
+
+        # Basic URL validation
+        if not job_url.startswith(('http://', 'https://')):
+            job_url = f"https://{job_url}"
+
+        # Run job posting analysis
+        try:
+            logger.info("🚀 Starting job URL analysis...")
+            analysis_result = await job_analyzer.analyze_job_posting('url', job_url)
+            logger.info("✅ Job URL analysis completed successfully")
+
+            # Add URL metadata
+            analysis_result.update({
+                "url_info": {
+                    "source_url": job_url,
+                    "analysis_type": "url_scraping"
+                }
+            })
+
+            return analysis_result
+
+        except Exception as e:
+            logger.error(f"❌ Job URL analysis failed: {str(e)}")
+            logger.error(traceback.format_exc())
+            raise HTTPException(status_code=500, detail=f"Job URL analysis failed: {str(e)}")
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Unexpected error in job URL analysis: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+# Health check endpoints
 @router.get("/health/ai")
 async def check_ai_health():
     """Check health status of AI detection components"""
@@ -96,10 +196,29 @@ async def check_ai_health():
         return {
             "status": "success",
             "ai_health": health_status,
-            "timestamp": str(traceback.format_exc())[:100] if False else "healthy"
+            "timestamp": "healthy"
         }
     except Exception as e:
         logger.error(f"Health check failed: {str(e)}")
+        return {
+            "status": "error",
+            "error": str(e),
+            "fallback_available": True
+        }
+
+
+@router.get("/health/job")
+async def check_job_analyzer_health():
+    """Check health status of job analyzer components"""
+    try:
+        health_status = await job_analyzer.health_check()
+        return {
+            "status": "success",
+            "job_analyzer_health": health_status,
+            "timestamp": "healthy"
+        }
+    except Exception as e:
+        logger.error(f"Job analyzer health check failed: {str(e)}")
         return {
             "status": "error",
             "error": str(e),
@@ -118,6 +237,6 @@ async def analyze_complete(
     return {
         "status": "coming_soon",
         "message": "Complete analysis will be available in MVP 2 & 3",
-        "available_analysis": ["resume_ai_enhanced"],
+        "available_analysis": ["resume_ai_enhanced", "job_posting_verification"],
         "ai_detection": "now_available"
     }

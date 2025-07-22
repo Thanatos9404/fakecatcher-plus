@@ -1,24 +1,337 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+.venv/
+.env/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+frontend/dist/
+frontend/build/
+backend/dist/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+.env.test
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+
 # Logs
-logs
 *.log
+logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Temporary files
+uploads/
+temp/
+tmp/
+*.tmp
+.cache/
+.parcel-cache/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# AI Models & Large Files
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+*.onnx
+*.bin
+models/weights/
+models/*.bin
+data/raw_training_data/
+data/labeled_resumes/
+data/job_postings/
+training_logs/
+wandb/
+checkpoints/
+
+# Hugging Face specific
+.cache/huggingface/
+transformers_cache/
+huggingface_hub/
+.huggingface/
+
+# API Keys & Secrets (CRITICAL - Never commit API keys)
+api_keys.json
+secrets/
+.env.production.local
+hf_token.txt
+*.key
+*.pem
+*.p12
+config/secrets.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+db.sqlite3
+database.db
+
+# Coverage & Testing
+coverage/
+.coverage
+.nyc_output
+.pytest_cache/
+htmlcov/
+test-results/
+jest-coverage/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Package managers
+.npm
+.yarn-integrity
+*.tgz
+package-lock.json.backup
+yarn.lock.backup
+
+# Python specific
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+bin/
+include/
+lib/
+lib64/
+share/
+pyvenv.cfg
+Scripts/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# Temporary directories
+tmp/
+temp/
+
+# OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+Desktop.ini
+
+# Parcel bundler cache
+.parcel-cache
+
+# Next.js / Nuxt.js
+.next
+.nuxt
+
+# Storybook
+.out
+.storybook-out
+
+# Setup and configuration backups
+setup_path.py.backup
+configure.py.backup
+config.py.old
+
+# Job Posting Analysis specific
+job_analysis_cache/
+extracted_images/
+ocr_temp/
+web_scraping_cache/
+
+# Company verification cache
+company_data_cache/
+domain_analysis_cache/
+whois_cache/
+
+# Web intelligence data
+web_intel_cache/
+screenshot_temp/
+crawl_data/
+
+# Analysis results (optional - keep if you want to save results)
+analysis_results/
+verification_reports/
+
+# Redis dump files
+dump.rdb
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Local development
+.local/
+local_config.json
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Media files (if not needed for the app)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+
+# Large datasets
+large_datasets/
+training_data/
+test_data/
+
+# Sensitive business data
+confidential/
+proprietary/
+business_logic/
+
+# Performance monitoring
+.nyc_output/
+coverage.xml
+
+# Sentry
+.sentryclirc
+
+# ESLint cache
+.eslintcache
+
+# Prettier cache
+.prettiercache
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# Temporary folders
+tmp/
+temp/
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS specific
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux specific
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# JetBrains IDEs
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.swp
+*.swo
+*~
+.vimrc.local
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
